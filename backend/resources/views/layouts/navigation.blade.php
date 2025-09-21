@@ -34,6 +34,16 @@
                     </x-slot>
 
                     <x-slot name="content">
+
+                        {{-- <x-dropdown-link :href="route("channels.show", auth()->user()->channel->id)">My channel
+
+                        </x-dropdown-link> --}}
+
+                        <x-dropdown-link :href="route('channels.show', auth()->user()->channel->id)">
+                            {{ __('My Channel') }}
+                        </x-dropdown-link>
+
+                        
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
