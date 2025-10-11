@@ -43,7 +43,26 @@ class ChannelController extends Controller
      */
     public function show(Channel $channel)
     {
-        return view('channels.show', compact('channel'));
+
+        $isSubscribed = $channel?->isSubscribed ? 'Unsubscribed' : 'Subscribed';
+       
+        if($channel->user_id == auth()->user()->id){
+            $isSubscribed  = 'Subscriptions';
+        }
+        $actionUrl = $channel?->isSubscribed
+            ? url('channels/'.$channel->id.'/subscriptions/'.$channel->isSubscribed->id)
+            : url('channels/'.$channel->id.'/subscriptions');
+
+
+        $subscriptionButton = '<div class="form-group" style="text-align:center !important"><button
+                            type="button" 
+                            id="checkSubscriptionAction"
+                            class="mt-4 inline-flex items-center px-4 py-2 bg-red-600 text-white border border-1 rounded-md transition ease-in-out duration-150 hover:bg-red-400" 
+                            data-type="'.$isSubscribed.'" data-url="'.$actionUrl.'">'
+                                .$isSubscribed.' '.$channel->totalSubscriptions().'+
+                        </button>
+                        </div>';
+        return view('channels.show', compact('channel','subscriptionButton'));
     }
 
     /**

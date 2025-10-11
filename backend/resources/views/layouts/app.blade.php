@@ -10,8 +10,13 @@
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+        
+        
         <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         {{-- Page-specific CSS --}}
@@ -19,8 +24,9 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
+            @auth
+                @include('layouts.navigation')
+            @endauth
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white shadow">
@@ -34,6 +40,16 @@
             <main>
                 {{ $slot }}
             </main>
-        </div>
+        </div>  
+        <script>
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+        </script>
+
+        @yield('scripts')
     </body>
 </html>

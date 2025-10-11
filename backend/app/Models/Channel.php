@@ -12,7 +12,6 @@ class Channel extends Model implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\ChannelFactory> */
     use HasFactory;
-
     use InteractsWithMedia;
 
     protected $fillable = [
@@ -21,14 +20,22 @@ class Channel extends Model implements HasMedia
         'user_id',
     ];
 
-    public function image(){
+    protected $with = ['user'];
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function totalSubscriptions(){
+        return $this->subscriptions()->count();
+    }
+    
+    public function image(){
         if($this->media->first()){
             return $this->media->first()->getFullUrl('thumb');;
         }
-
         return null;
-        
     }
 
     /**
@@ -43,4 +50,17 @@ class Channel extends Model implements HasMedia
              ->nonQueued();  
     }
 
+    public function editable(){
+        if(! auth()->check()) return false;
+        return auth()->check() && auth()->user()->id === $this->user_id;
+    }
+
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function isSubscribed(){
+        return $this->hasOne(Subscription::class)->where("user_id", auth()->user()?->id);
+    }
 }

@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Channel>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Subscription>
  */
-class ChannelFactory extends Factory
+class SubscriptionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,10 +17,11 @@ class ChannelFactory extends Factory
     public function definition(): array
     {
         return [
-            "title" => fake()->sentence(3),
-            "description" => fake()->paragraph(),
             "user_id" => function () {
                 return \App\Models\User::factory()->create()->id;
+            },
+            "channel_id" => function () {
+                return \App\Models\Channel::factory()->create()->id;
             },
         ];
     }
